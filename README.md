@@ -1,5 +1,7 @@
 ## Swimming in potential flow
 
+<div style="text-align: center"><img src="joukowski.png" alt="Joukowksi foil locomoting under sinusoidal actuation."></div> 
+
 This repository contains Julia code for simulating a freely deforming Joukowski foil that sheds vortices discretely in time, effectively modeling planar fish-like swimming. The dynamics are derived using a momentum-conserving model (see [this](https://www.ideals.illinois.edu/handle/2142/83903) or [this](http://scottdavidkelly.wdfiles.com/local--files/start/kpx12.pdf) for more information concerning how to derive the dynamics). The idea is that at each discrete instance in time, a [point vortex](http://web.mit.edu/fluids-modules/www/potential_flows/LecturesHTML/lec1011/node21.html) is placed into the fluid corresponding to the Kutta condition, which enforces that the local velocity field is zero at the preimage of the Joukowski foil. 
 
 Several implementations of this have existed over the course of several graduate students from [Professor Scott Kelly's lab](http://www.kellyfish.com/) at UNC Charlotte. A Matlab version of this code has survived over the years and, to keep with the times, the present repository is my implementation of it in Julia.
