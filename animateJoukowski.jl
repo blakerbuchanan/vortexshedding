@@ -1,47 +1,7 @@
 # Make an animation of the Joukowski foil shedding vortices
 plotlyjs()
 
-xplot = plot(sol.t,[sol[1,:], sol[2,:], sol[3,:]], xaxis = ("t", (0.0,T)), label=["x" "y" "θ"],linewidth=2.0)
-# plot([0,1,2],[0,1,2], seriestype=:scatter, zcolor=[1,2,3], markerstrokewidth=0, markersize=2.0, c=:redsblues, legend=false, colorbar=false)
-
-solArray = convert(Array,sol);
-fname = "video/foilVortices";
-Tspaniter = 0.0:deltaT:T;
-numDigits = ndigits(length(sol.t));
-i = 1;
-maxStrength = maximum(abs.(vp.mvortex[:,3]));
-(finalFoilData, finalVortexData, finalColorData, finalAlphaData) = getFoilAndVortexPlotData(sol,sol.t[end],maxStrength);
-
-# currentR = 0; currentG = 0; currentB = 1;
-# tint_factor = 0.0;
-# newR = floor(Int8, currentR + (255 - currentR) * tint_factor)
-# newG = floor(Int8, currentG + (255 - currentG) * tint_factor)
-# newB = floor(Int8, currentB + (255 - currentB) * tint_factor)
-# testcolor = RGB(newR/255.0,newG/255.0,newB/255.0);
-# testcolors1 = [RGB(0,0,1) for i in 1:100];
-# testcolors2 = [RGB(1,0,0) for i in 101:length(finalStrengthData)];
-# testcolors = [testcolors1; testcolors2];
-# alphas = [0.5 for i in 1:length(finalStrengthData)];
-
-plot(finalFoilData, xaxis = ("x", (-5,15)), yaxis=("y",(-3,3)), color=:black, linewidth=1.5, legend=false,aspect_ratio=0.85)
-plot!(real.(finalVortexData), imag.(finalVortexData), seriestype=:scatter, markersize=0.8, markerstrokewidth=0, markeralpha = finalAlphaData, color=finalColorData, legend=false, colorbar=false, grid=false, showaxis=false, xlabel=false,ylabel=false)
-savefig("joukowskinew2.pdf")
-
-for t in sol.t
-    (foilData, vortexData, colorData, alphaData) = getFoilAndVortexPlotData(sol,fp,t,maxStrength);
-    foilPlot = plot(foilData, xaxis = ("x", (-5,15)), yaxis=("y",(-5,5)), color=:black, linewidth=1.5, legend=false, aspect_ratio=0.85);
-
-    if isempty(vortexData) != 1
-        plot!(real.(vortexData), imag.(vortexData), seriestype=:scatter, markersize=0.8, markerstrokewidth=0, markeralpha = alphaData, color=colorData, clims=(0.0,1.0), legend=false, colorbar=false, grid=false, showaxis=false, xlabel=false,ylabel=false);
-    end
-    numZeros = numDigits - ndigits(i);
-    firstPart = join(["0" for j in 1:numZeros]);
-    imagei = firstPart*string(i);
-    fn = fname*imagei;
-    savefig(fn)
-    i = i + 1;
-end
-
+# Define functions to get foil and vortex data
 function getFoilAndVortexPlotData(sol,t,maxStrength)
     rc = fp.rc; # radius of the circle in zeta plane. Considered to be 1
     ua = fp.ua; # amplitude of flapping
@@ -136,3 +96,46 @@ function getVortexPlotData(sol,vp,fp,t,maxStrength)
     end
     return vortexData, colorData, alphaData
 end
+
+
+xplot = plot(sol.t,[sol[1,:], sol[2,:], sol[3,:]], xaxis = ("t", (0.0,T)), label=["x" "y" "θ"],linewidth=2.0)
+# plot([0,1,2],[0,1,2], seriestype=:scatter, zcolor=[1,2,3], markerstrokewidth=0, markersize=2.0, c=:redsblues, legend=false, colorbar=false)
+
+solArray = convert(Array,sol);
+fname = "video/foilVortices";
+Tspaniter = 0.0:deltaT:T;
+numDigits = ndigits(length(sol.t));
+i = 1;
+maxStrength = maximum(abs.(vp.mvortex[:,3]));
+(finalFoilData, finalVortexData, finalColorData, finalAlphaData) = getFoilAndVortexPlotData(sol,sol.t[end],maxStrength);
+
+# currentR = 0; currentG = 0; currentB = 1;
+# tint_factor = 0.0;
+# newR = floor(Int8, currentR + (255 - currentR) * tint_factor)
+# newG = floor(Int8, currentG + (255 - currentG) * tint_factor)
+# newB = floor(Int8, currentB + (255 - currentB) * tint_factor)
+# testcolor = RGB(newR/255.0,newG/255.0,newB/255.0);
+# testcolors1 = [RGB(0,0,1) for i in 1:100];
+# testcolors2 = [RGB(1,0,0) for i in 101:length(finalStrengthData)];
+# testcolors = [testcolors1; testcolors2];
+# alphas = [0.5 for i in 1:length(finalStrengthData)];
+
+plot(finalFoilData, xaxis = ("x", (-5,15)), yaxis=("y",(-3,3)), color=:black, linewidth=1.5, legend=false,aspect_ratio=0.85)
+plot!(real.(finalVortexData), imag.(finalVortexData), seriestype=:scatter, markersize=0.8, markerstrokewidth=0, markeralpha = finalAlphaData, color=finalColorData, legend=false, colorbar=false, grid=false, showaxis=false, xlabel=false,ylabel=false)
+savefig("joukowskinew2.pdf")
+
+for t in sol.t
+    (foilData, vortexData, colorData, alphaData) = getFoilAndVortexPlotData(sol,fp,t,maxStrength);
+    foilPlot = plot(foilData, xaxis = ("x", (-5,15)), yaxis=("y",(-5,5)), color=:black, linewidth=1.5, legend=false, aspect_ratio=0.85);
+
+    if isempty(vortexData) != 1
+        plot!(real.(vortexData), imag.(vortexData), seriestype=:scatter, markersize=0.8, markerstrokewidth=0, markeralpha = alphaData, color=colorData, clims=(0.0,1.0), legend=false, colorbar=false, grid=false, showaxis=false, xlabel=false,ylabel=false);
+    end
+    numZeros = numDigits - ndigits(i);
+    firstPart = join(["0" for j in 1:numZeros]);
+    imagei = firstPart*string(i);
+    fn = fname*imagei;
+    savefig(fn)
+    i = i + 1;
+end
+
